@@ -26,7 +26,7 @@ void AChaserGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	StartRoundWait();
+	//this->CurrentGameState = EGameState::GS_MainMenu;
 }
 
 
@@ -42,7 +42,7 @@ void AChaserGameMode::StartRoundWait()
 		if (spawner) this->Spawners.Add(spawner);
 	}
 
-	this->GetWorldTimerManager().SetTimer(this->_roundTimer, this, &AChaserGameMode::StartRoundPlay, RoundWaitTime);
+	this->GetWorldTimerManager().SetTimer(this->_roundTimer, this, &AChaserGameMode::StartRoundPlay, RoundWaitTime, false);
 }
 
 
@@ -51,7 +51,6 @@ void AChaserGameMode::StartRoundPlay()
 	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, "Round Play Ticked!");
 
 	this->CurrentGameState = EGameState::GS_RoundPlay;
-	this->GetWorldTimerManager().ClearTimer(_roundTimer);
 
 	Spawn();
 	this->GetWorldTimerManager().SetTimer(this->_spawnTimer, this, &AChaserGameMode::Spawn, 1.f, true);
@@ -60,6 +59,8 @@ void AChaserGameMode::StartRoundPlay()
 
 void AChaserGameMode::Spawn()
 {
+	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Green, "Spawn");
+
 	if (Spawners[0]->PickupsSpawned < MaxPickups)
 	{
 		Spawners[0]->SpawnPickup();

@@ -9,8 +9,9 @@
 UENUM(BlueprintType)
 enum class EGameState : uint8
 {
-	GS_RoundWait UMETA(DisplayName = "Round Wait"),
-	GS_RoundPlay UMETA(DisplayName = "Round Play")
+	GS_RoundWait	UMETA(DisplayName = "Round Wait"),
+	GS_RoundPlay	UMETA(DisplayName = "Round Play"),
+	GS_MainMenu		UMETA(DisplayName = "Menu")
 };
 
 class APickupSpawner;
@@ -21,8 +22,6 @@ class AChaserGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-
-	/** Constructor **/
 	AChaserGameMode();
 
 	/** Called on play button **/

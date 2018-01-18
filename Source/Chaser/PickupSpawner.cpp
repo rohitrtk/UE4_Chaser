@@ -35,7 +35,6 @@ void APickupSpawner::BeginPlay()
 void APickupSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to spawn an APickup actor
@@ -52,9 +51,6 @@ void APickupSpawner::SpawnPickup()
 		world->SpawnActor<APickup>(this->SpawnActor, spawnLocation, rotator);
 
 		this->PickupsSpawned++;
-		
-		//FString s = FString::FromInt(this->PickupsSpawned);
-		//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, s);
 	}
 }
 

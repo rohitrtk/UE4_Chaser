@@ -60,15 +60,24 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	/** Players score **/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	int Score;
 
+	/** Increments the players score by parameter increment
+	 * @param increment   This is the increment to add to the players score
+	**/
 	FORCEINLINE void IncrementScore(const int32& increment) { this->Score += increment; }
 
 protected:
 
+	/** The rate at which the zoom zoom's in/out **/
 	const float ZoomScale = 50.f;
+
+	/** Maximum zoom in the players camera arm can be **/
 	const float MaxZoomIn = 300.f;
+
+	/**  Maximum zoom out the players camera arm can be **/
 	const float MaxZoomOut = 1400.f;
 
 	/** Called via input action to zoom in **/

@@ -26,12 +26,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/** This actors statics mesh component **/
 	UPROPERTY(VisibleAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* MeshComponent;
 
+	/** This actors sphere collider **/
 	UPROPERTY(VisibleAnywhere, Category = "Collision")
 	USphereComponent* SphereCollider;
 	
+	/** Called upon actor overlap **/
 	UFUNCTION()
 	void Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
