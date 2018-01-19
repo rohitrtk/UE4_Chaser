@@ -72,6 +72,9 @@ void AChaserCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	PlayerInputComponent->BindAction("ZoomIn", IE_Pressed, this, &AChaserCharacter::ZoomIn);
 	PlayerInputComponent->BindAction("ZoomOut", IE_Pressed, this, &AChaserCharacter::ZoomOut);
+
+	this->GetCharacterMovement()->bRequestedMoveUseAcceleration = false;
+	this->GetCharacterMovement()->MaxWalkSpeed = this->StartingMoveSpeed;
 }
 
 void AChaserCharacter::TurnAtRate(float Rate)
@@ -133,5 +136,11 @@ void AChaserCharacter::ZoomOut()
 	if (newZoom > MaxZoomOut) return;
 
 	this->GetCameraBoom()->TargetArmLength += this->ZoomScale;
+}
+
+
+void AChaserCharacter::SetMoveSpeed(const int32& score)
+{
+	this->GetCharacterMovement()->MaxWalkSpeed += this->MovementMultiplier * score;
 }
 

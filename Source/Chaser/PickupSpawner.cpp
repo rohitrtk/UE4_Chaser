@@ -52,5 +52,9 @@ void APickupSpawner::SpawnPickup()
 
 		this->PickupsSpawned++;
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, "Pickup doesn't exist!");
+	}
 }
 

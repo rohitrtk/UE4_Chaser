@@ -69,6 +69,9 @@ public:
 	**/
 	FORCEINLINE void IncrementScore(const int32& increment) { this->Score += increment; }
 
+	/* Sets the movement speed for the character based on current score */
+	void SetMoveSpeed(const int32& score);
+
 protected:
 
 	/** The rate at which the zoom zoom's in/out **/
@@ -79,6 +82,12 @@ protected:
 
 	/**  Maximum zoom out the players camera arm can be **/
 	const float MaxZoomOut = 1400.f;
+
+	/* Characters starting max move speed */
+	const float StartingMoveSpeed = 600.f;
+
+	/* Characters movement multiplier */
+	const float MovementMultiplier = 25.f;
 
 	/** Called via input action to zoom in **/
 	void ZoomIn();

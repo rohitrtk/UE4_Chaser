@@ -39,7 +39,10 @@ void AChaserGameMode::StartRoundWait()
 	for (TActorIterator<AActor> It(this->GetWorld(), APickupSpawner::StaticClass()); It; ++It)
 	{
 		APickupSpawner* spawner = Cast<APickupSpawner>(*It);
-		if (spawner) this->Spawners.Add(spawner);
+		if (spawner && !Spawners.Contains(spawner))
+		{
+			this->Spawners.Add(spawner);
+		}
 	}
 
 	this->GetWorldTimerManager().SetTimer(this->_roundTimer, this, &AChaserGameMode::StartRoundPlay, RoundWaitTime, false);
@@ -59,7 +62,11 @@ void AChaserGameMode::StartRoundPlay()
 
 void AChaserGameMode::Spawn()
 {
-	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Green, "Spawn");
+	if (!Spawners[0])
+	{
+		GEngine->AddOnScreenDebugMessage(0, 2.f, FColor::Purple, "Could not spawn pickup!");
+		return;
+	}
 
 	if (Spawners[0]->PickupsSpawned < MaxPickups)
 	{
@@ -70,7 +77,7 @@ void AChaserGameMode::Spawn()
 		this->GetWorldTimerManager().ClearTimer(this->_spawnTimer);
 
 		StartRoundWait();
-	
+
 		Spawners[0]->PickupsSpawned = 0;
 	}
 }
