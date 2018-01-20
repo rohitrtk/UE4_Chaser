@@ -11,7 +11,8 @@ enum class EGameState : uint8
 {
 	GS_RoundWait	UMETA(DisplayName = "Round Wait"),
 	GS_RoundPlay	UMETA(DisplayName = "Round Play"),
-	GS_MainMenu		UMETA(DisplayName = "Menu")
+	GS_MainMenu		UMETA(DisplayName = "Menu"),
+	GS_GameOver		UMETA(DisplayName = "Game Over")
 };
 
 class APickupSpawner;
@@ -48,15 +49,29 @@ public:
 	void Spawn();
 
 	/** Array of APickupSpawner's in the world **/
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 	TArray<APickupSpawner*> Spawners;
 
 	/** Maximum pickups to spawn per round **/
-	UPROPERTY(EditAnywhere, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	int32 MaxPickups;
+
+	/* Time in seconds before calling GamerTimerElapsed */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+	float GameTime;
+
+	/* Called when the game timer has been elapsed */
+	UFUNCTION(BlueprintCallable)
+	void GameTimerElapsed();
+
+	/* Called to end the game and show the user their score */
+	UFUNCTION(BlueprintImplementableEvent)
+	void DisplayGameOverScreen();
 
 private:
 
 	FTimerHandle _roundTimer;
 	FTimerHandle _spawnTimer;
+	FTimerHandle _gameOverTimer;
 };
 

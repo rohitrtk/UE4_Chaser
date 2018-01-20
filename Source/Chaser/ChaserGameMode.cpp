@@ -17,8 +17,6 @@ AChaserGameMode::AChaserGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
-
-	this->MaxPickups = 5;
 }
 
 
@@ -26,13 +24,15 @@ void AChaserGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	this->MaxPickups = 5;
+	this->GameTime = 60.f;
 	//this->CurrentGameState = EGameState::GS_MainMenu;
 }
 
 
 void AChaserGameMode::StartRoundWait()
 {
-	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, "Round Wait Ticked!");
+	//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, "Round Wait Ticked!");
 
 	this->CurrentGameState = EGameState::GS_RoundWait;
 
@@ -51,12 +51,14 @@ void AChaserGameMode::StartRoundWait()
 
 void AChaserGameMode::StartRoundPlay()
 {
-	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, "Round Play Ticked!");
+	//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, "Round Play Ticked!");
 
 	this->CurrentGameState = EGameState::GS_RoundPlay;
 
 	Spawn();
 	this->GetWorldTimerManager().SetTimer(this->_spawnTimer, this, &AChaserGameMode::Spawn, 1.f, true);
+
+	this->GetWorldTimerManager().SetTimer(this->_gameOverTimer, this, &AChaserGameMode::GameTimerElapsed, 1.f, true);
 }
 
 
@@ -68,6 +70,9 @@ void AChaserGameMode::Spawn()
 		return;
 	}
 
+	Spawners[0]->SpawnPickup();
+
+	/*
 	if (Spawners[0]->PickupsSpawned < MaxPickups)
 	{
 		Spawners[0]->SpawnPickup();
@@ -79,6 +84,25 @@ void AChaserGameMode::Spawn()
 		StartRoundWait();
 
 		Spawners[0]->PickupsSpawned = 0;
+	} */
+}
+
+
+void AChaserGameMode::GameTimerElapsed()
+{
+	if (GameTime <= 0)
+	{
+		this->GetWorldTimerManager().ClearTimer(_gameOverTimer);
+
+		this->GetWorldTimerManager().ClearTimer(_spawnTimer);
+
+		this->CurrentGameState = EGameState::GS_GameOver;
+
+		DisplayGameOverScreen();
+
+		return;
 	}
+
+	GameTime -= 1;
 }
 
