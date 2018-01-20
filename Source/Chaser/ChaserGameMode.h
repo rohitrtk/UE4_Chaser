@@ -64,6 +64,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GameTimerElapsed();
 
+	UFUNCTION(BlueprintCallable)
+	void CleanWorld();
+
 	/* Called to end the game and show the user their score */
 	UFUNCTION(BlueprintImplementableEvent)
 	void DisplayGameOverScreen();

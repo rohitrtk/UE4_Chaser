@@ -7,6 +7,7 @@
 #include "PickupSpawner.h"
 #include "Engine/Engine.h"
 #include "EngineUtils.h"
+#include "Pickup.h"
 
 
 AChaserGameMode::AChaserGameMode()
@@ -88,6 +89,19 @@ void AChaserGameMode::Spawn()
 }
 
 
+void AChaserGameMode::CleanWorld()
+{
+	for (TActorIterator<AActor> It(this->GetWorld(), APickup::StaticClass()); It; ++It)
+	{
+		APickup* pickup = Cast<APickup>(*It);
+		if (pickup)
+		{
+			pickup->DestroyActor();
+		}
+	}
+}
+
+
 void AChaserGameMode::GameTimerElapsed()
 {
 	if (GameTime <= 0)
@@ -97,6 +111,8 @@ void AChaserGameMode::GameTimerElapsed()
 		this->GetWorldTimerManager().ClearTimer(_spawnTimer);
 
 		this->CurrentGameState = EGameState::GS_GameOver;
+
+		CleanWorld();
 
 		DisplayGameOverScreen();
 

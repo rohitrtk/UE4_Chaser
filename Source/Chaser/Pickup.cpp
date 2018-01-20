@@ -9,7 +9,6 @@
 #include "Engine/Engine.h"
 
 
-// Sets default values
 APickup::APickup()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -25,21 +24,25 @@ APickup::APickup()
 	this->SphereCollider->SetMassOverrideInKg(TEXT("NAME_None"), 100000.f);
 }
 
-// Called when the game starts or when spawned
+
 void APickup::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	this->SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &APickup::Overlap);
 
-	//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, "HELLO");
+	this->LifeSpan = 7.f;
+
+	// Ghetto actor lifespan
+	GetWorldTimerManager().SetTimer(this->_lifeSpanTimerHandle, this, &APickup::DestroyActor, LifeSpan, false);
 }
 
-// Called every frame
+
 void APickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
 
 void APickup::Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -50,10 +53,21 @@ void APickup::Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherAct
 
 		if (character)
 		{
+			this->_touchedByPlayer = true;
+
 			character->IncrementScore(1);
 			character->SetMoveSpeed(character->Score);
-			Destroy();
+			DestroyActor();
 		}
 	}
+}
+
+
+void APickup::DestroyActor()
+{
+	if(!_touchedByPlayer) UGameplayStatics::SpawnEmitterAtLocation(this->GetWorld(), BoomEffect, this->GetActorLocation());
+	else UGameplayStatics::SpawnEmitterAtLocation(this->GetWorld(), CoolEffect, this->GetActorLocation());
+
+	Destroy();
 }
 

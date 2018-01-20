@@ -8,6 +8,7 @@
 
 class UBoxComponent;
 class USphereComponent;
+class UParticleSystem;
 
 UCLASS()
 class CHASER_API APickup : public AActor
@@ -33,10 +34,31 @@ public:
 	/** This actors sphere collider **/
 	UPROPERTY(VisibleAnywhere, Category = "Collision")
 	USphereComponent* SphereCollider;
-	
+
+	/** This actors particle emitter if not touched by a player; displayed on death **/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FX")
+	UParticleSystem* BoomEffect;
+
+	/** This actors particle emitter if touched by a player; displayed on death **/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FX")
+	UParticleSystem* CoolEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+	float LifeSpan;
+
+	UFUNCTION(BlueprintCallable)
+	/** Calls Destroy() but spawns a particle effect before death **/
+	void DestroyActor();
+
 	/** Called upon actor overlap **/
 	UFUNCTION()
 	void Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+private:
+	
+	FTimerHandle _lifeSpanTimerHandle;
+
+	bool _touchedByPlayer = false;
 };
 

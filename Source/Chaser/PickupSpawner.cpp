@@ -9,7 +9,7 @@
 #include "Pickup.h"
 #include "Engine/GameEngine.h"
 
-// Sets default values
+
 APickupSpawner::APickupSpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -25,19 +25,19 @@ APickupSpawner::APickupSpawner()
 	this->PickupsSpawned = 0;
 }
 
-// Called when the game starts or when spawned
+
 void APickupSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-// Called every frame
+
 void APickupSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-// Called to spawn an APickup actor
+
 void APickupSpawner::SpawnPickup()
 {
 	UWorld* world = this->GetWorld();
@@ -54,7 +54,7 @@ void APickupSpawner::SpawnPickup()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, "Pickup doesn't exist!");
+		GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, "Pickup doesn't exist!");
 	}
 }
 
